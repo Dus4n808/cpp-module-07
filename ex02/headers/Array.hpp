@@ -12,8 +12,8 @@
 
 #ifndef ARRAY_HPP
 #define ARRAY_HPP
+#include <exception>
 #include <iostream>
-#include <new>
 
 
 template <typename T>
@@ -23,56 +23,103 @@ class Array {
 		T _len;
 		
 	public:
-		//FCO
+		// ===== FCO =====
 		Array();
 		Array(unsigned int n);
 		Array(const Array& copy);
 		Array& operator=(const Array& assign);
+		T& operator[](unsigned int index);
 		~Array();
 
-		//methods
+		// ===== Methods =====
 		T* addValue(int value);
 		void printArray(void);
+		T size(void) const;
+
+		// ===== Exception =====
+		class OutOfBounds : public std::exception {
+			public:
+				virtual const char * what() const throw() {
+					return "Out of index";
+				}
+		};
 };
 
+// ================================================================ //
+// Default Constructor                       
+// ================================================================ //
 
-//default
 template <typename T>
 Array<T>::Array() : _data() {}
 
-//Default unsigned
+
+// ================================================================ //
+// Default Constructor (unsigned int)                       
+// ================================================================ //
+
 template <typename T>
 Array<T>::Array(unsigned int n) {
 	_len = n;
-	try {
-		_data = new T[n];	
-	}
-	catch (std::bad_alloc& e) {
-		std::cout << "Error " << e.what() << std::endl;
+	_data = new T[n];
+}
+
+
+// ================================================================ //
+// Copy Constructor                       
+// ================================================================ //
+
+template <typename T>
+Array<T>::Array(const Array<T>& copy) {
+	_len = copy._len;
+	_data = new T[_len];
+
+	for (unsigned int i = 0; i < _len; i++) {
+		_data[i] = copy._data[i];
 	}
 }
 
-//copy
-template <typename T>
-Array<T>::Array(const Array<T>& copy) : _data(copy._data) {}
 
-//assign
+// ================================================================ //
+// Overload Operator                       
+// ================================================================ //
+
 template <typename T>
 Array<T>& Array<T>::operator=(const Array<T>& assign) {
 	if (this != &assign) {
+		delete [] _data;
+		_len = assign._len;
 		_data = assign._data;
+		// ===== Deep copy =====
+		for (unsigned int i = 0; i < _len; i++) {
+			_data[i] = assign._data[i];
+		}
 	}
 	return *this;
 }
 
-//destructor
+
+template <typename T>
+T& Array<T>::operator[](unsigned int index) {
+	if (index >= _len) {
+		throw OutOfBounds();
+	}
+	return _data[index];
+}
+
+// ================================================================ //
+// Destructor                       
+// ================================================================ //
+
 template <typename T>
 Array<T>::~Array() {
+	// ===== Delete all =====
 		delete [] _data;
 }
 
 
-//methods
+// ================================================================ //
+// Methods                       
+// ================================================================ //
 
 template <typename T>
 void Array<T>::printArray() {
@@ -81,6 +128,7 @@ void Array<T>::printArray() {
 	}
 }
 
+
 template <typename T>
 T* Array<T>::addValue(int value) {
 	for (int i = 0; i < _len; i++) {
@@ -88,6 +136,12 @@ T* Array<T>::addValue(int value) {
 	}
 	return _data;
 }
+
+template <typename T>
+T Array<T>::size() const {
+	return _len;
+}
+
 
 
 #endif

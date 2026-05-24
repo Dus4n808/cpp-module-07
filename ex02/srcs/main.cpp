@@ -22,6 +22,7 @@ int main() {
 	Array<double> b(10);
 	b.addValue(1);
 	b.printArray();
+	std::cout << b.size() << std::endl;
 	
 	return 0;
 }
