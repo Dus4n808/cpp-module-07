@@ -35,7 +35,7 @@ class Array {
 		// ===== Methods =====
 		T* addValue(int value);
 		void printArray(void);
-		T size(void) const;
+		unsigned int size(void) const;
 
 		// ===== Exception =====
 		class OutOfBounds : public std::exception {
@@ -113,9 +113,7 @@ T& Array<T>::operator[](unsigned int index) {
 
 template <typename T>
 Array<T>::~Array() {
-	// ===== Delete all =====
-	if (_data)
-		delete [] _data;
+	delete [] _data;
 }
 
 
@@ -140,7 +138,7 @@ T* Array<T>::addValue(int value) {
 }
 
 template <typename T>
-T Array<T>::size() const {
+unsigned int Array<T>::size() const {
 	return _len;
 }
 
