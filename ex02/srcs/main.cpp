@@ -26,9 +26,18 @@ int main() {
 	Array<int> d(2);
 	c = d;
 
+	try {
+		for (int i = 0; i < c.size(); i++) {
+			c[i] = i + 1;
+		}
+		c.printArray();
+	}
+	catch (std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+
 	a.printArray();
 	b.printArray();
-	c.printArray();
 
 	// ===== Exception Index =====
 	std::cout << a.size() << std::endl;
