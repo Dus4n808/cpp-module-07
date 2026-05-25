@@ -11,18 +11,42 @@
 /* ************************************************************************** */
 
 #include "../headers/Array.hpp"
+#include <exception>
+#include <iostream>
 
 
 int main() {
 
-	Array<int> test(4);
-	test.printArray();
-	test.addValue(10);
-	test.printArray();
-	Array<double> b(10);
-	b.addValue(1);
+	// ===== Copy =====
+	Array<int> a(2);
+	Array<int> b(a);
+
+	// ===== Assing =====
+	Array<int> c(2);
+	Array<int> d(2);
+	c = d;
+
+	a.printArray();
 	b.printArray();
-	std::cout << b.size() << std::endl;
+	c.printArray();
+
+	// ===== Exception Index =====
+	std::cout << a.size() << std::endl;
+	try {
+		a[4] = 23;
+		std::cout << a[4] << std::endl;
+	}
+	catch (std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	try {
+		a[1] = 34;
+		std::cout << a[1] << std::endl;
+	}
+	catch (std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+
 	
 	return 0;
 }

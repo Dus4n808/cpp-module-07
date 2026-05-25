@@ -12,6 +12,7 @@
 
 #ifndef ARRAY_HPP
 #define ARRAY_HPP
+#include <cstddef>
 #include <exception>
 #include <iostream>
 
@@ -20,7 +21,7 @@ template <typename T>
 class Array {
 	private:
 		T* _data;
-		T _len;
+		unsigned int _len;
 		
 	public:
 		// ===== FCO =====
@@ -50,7 +51,7 @@ class Array {
 // ================================================================ //
 
 template <typename T>
-Array<T>::Array() : _data() {}
+Array<T>::Array() : _data(NULL), _len(0) {}
 
 
 // ================================================================ //
@@ -60,7 +61,7 @@ Array<T>::Array() : _data() {}
 template <typename T>
 Array<T>::Array(unsigned int n) {
 	_len = n;
-	_data = new T[n];
+	_data = new T[n]();
 }
 
 
@@ -88,7 +89,7 @@ Array<T>& Array<T>::operator=(const Array<T>& assign) {
 	if (this != &assign) {
 		delete [] _data;
 		_len = assign._len;
-		_data = assign._data;
+		_data = new T[_len];
 		// ===== Deep copy =====
 		for (unsigned int i = 0; i < _len; i++) {
 			_data[i] = assign._data[i];
@@ -113,6 +114,7 @@ T& Array<T>::operator[](unsigned int index) {
 template <typename T>
 Array<T>::~Array() {
 	// ===== Delete all =====
+	if (_data)
 		delete [] _data;
 }
 
@@ -123,7 +125,7 @@ Array<T>::~Array() {
 
 template <typename T>
 void Array<T>::printArray() {
-	for (int i = 0; i < _len; i++) {
+	for (unsigned int i = 0; i < _len; i++) {
 		std::cout << _data[i] << std::endl;
 	}
 }
@@ -131,7 +133,7 @@ void Array<T>::printArray() {
 
 template <typename T>
 T* Array<T>::addValue(int value) {
-	for (int i = 0; i < _len; i++) {
+	for (unsigned int i = 0; i < _len; i++) {
 		_data[i] += value;
 	}
 	return _data;
@@ -141,7 +143,6 @@ template <typename T>
 T Array<T>::size() const {
 	return _len;
 }
-
 
 
 #endif
